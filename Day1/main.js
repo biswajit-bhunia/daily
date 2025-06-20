@@ -2,8 +2,8 @@ let canvas = document.getElementById('canvas');
 let ctx = canvas.getContext('2d');
 let width = window.innerWidth;
 let height = window.innerHeight;
-
-
+ctx.translate(0, height / 2); // Center the canvas
+// ctx.scale(1, -1); // Flip the y-axis
 function resizeCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -27,15 +27,29 @@ function draw() {
     //     ctx.stroke()
     // }
 
-    for (let i = 0; i < 100; i++) {
-        let x = Math.random() * width;
-        let y = Math.random() * height;
+    // let midY = canvas.height / 2;
 
-        ctx.beginPath();        
-        ctx.moveTo(x + 50, y + 50);      
-        ctx.lineTo(x + 300, y + 150); 
-        ctx.stroke()
+    // for (let angle = 0; angle < Math.PI * 2; angle += 0.01) {
+    //     let x = angle * 250;
+    //     let y = Math.sin(angle) * 200; // just like in 2d lotting x axis is increasing linearly then y value is plotted based on the sine function
+    //     ctx.fillRect(x, midY - y, 5, 5); // subtract y to flip vertically
+    // }
+    let w = width / 2;
+    let h = height / 2;
+    let amplitude = height * 0.2;  // better name and scale
+    let speed = 0.01;
+    let angle = 0;
+    
+    function render() {
+        let y = amplitude * Math.sin(angle) + h; // center wave vertically
+        ctx.clearRect(0, 0, width, height);
+        ctx.beginPath();
+        ctx.arc(w, y, 20, 0, Math.PI * 2);
+        ctx.fill();
+        angle += speed;
+        requestAnimationFrame(render);
     }
+    render();
 }
 
 window.addEventListener('resize', resizeCanvas);
